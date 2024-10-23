@@ -53,6 +53,12 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DC7BA765942C43FD925ADDE4E270022C }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E4426E09FD654F2F810598FCD87E59FA }}
 
+      - name: Deploy startup script
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp deploy --src-path '${{ github.workspace }}/src/main/jboss/config/createPasswordlessDataSource.sh' --name cephalin-jboss5 --resource-group cephalin-jboss5_group  --async true --type startup
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
