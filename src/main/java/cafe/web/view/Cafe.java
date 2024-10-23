@@ -25,7 +25,8 @@ public class Cafe implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
-	private static final String BASE_URI = "http://localhost/rest/coffees";
+	// private static final String BASE_URI = "http://localhost/rest/coffees";
+	private static final String BASE_URI = String.format("https://%s/rest/coffees", System.getenv("WEBSITE_HOSTNAME"));
 
 	private transient Client client;
 
