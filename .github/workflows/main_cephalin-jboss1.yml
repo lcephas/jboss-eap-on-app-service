@@ -31,6 +31,12 @@ jobs:
           name: java-app
           path: '${{ github.workspace }}/target/*.war'
 
+      - name: Upload startup script for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: start-script
+          path: '${{ github.workspace }}/src/main/jboss/config/createPasswordlessDataSource.sh'
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -52,6 +58,17 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F345DAEC6234C818A38BD8EFBC1639C }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0B57E2DA0AFF4073A2D78A40DB7039C2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DA72FCD9301B4D19822EBE520672DA06 }}
+
+      - name: Download start script from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: start-script
+      
+      - name: Deploy startup script
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp deploy --src-path createPasswordlessDataSource.sh --name cephalin-jboss1 --resource-group cephalin-jboss1_group  --async true --type startup
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
