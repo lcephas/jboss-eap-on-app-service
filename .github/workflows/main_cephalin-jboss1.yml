@@ -68,7 +68,7 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az webapp deploy --src-path createPasswordlessDataSource.sh --name cephalin-jboss1 --resource-group cephalin-jboss1_group  --async true --type startup
+            az webapp deploy --src-path createPasswordlessDataSource.sh --name cephalin-jboss1 --resource-group cephalin-jboss1_group --type startup --track-status false
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
